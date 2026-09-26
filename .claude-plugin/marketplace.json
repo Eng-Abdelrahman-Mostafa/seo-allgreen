@@ -1,0 +1,14 @@
+{
+  "name": "seo-allgreen",
+  "description": "Technical SEO + PageSpeed 100 skill for Claude Code",
+  "owner": {
+    "name": "Eng-Abdelrahman-Mostafa"
+  },
+  "plugins": [
+    {
+      "name": "seo-allgreen",
+      "source": "./plugins/seo-allgreen",
+      "description": "Audit and fix technical SEO, pre-render SPAs, pass Semrush Site Audit and reach 100 in PageSpeed Insights."
+    }
+  ]
+}

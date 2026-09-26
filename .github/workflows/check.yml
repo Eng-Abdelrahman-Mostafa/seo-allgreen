@@ -1,0 +1,22 @@
+name: check
+on: [push, pull_request]
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax-check scripts and tools
+        run: |
+          set -e
+          for f in $(find plugins -name '*.mjs' -o -name '*.js' | grep -v snippets); do node --check "$f"; done
+      - name: Validate JSON manifests
+        run: |
+          node -e 'for (const f of [".claude-plugin/marketplace.json","plugins/seo-allgreen/.claude-plugin/plugin.json"]) JSON.parse(require("fs").readFileSync(f,"utf8"))'
+      - name: Tools run without dependencies
+        run: |
+          T=plugins/seo-allgreen/skills/seo-allgreen/templates/tools
+          node $T/seo-audit.mjs || true
+          node $T/pagespeed.mjs || true

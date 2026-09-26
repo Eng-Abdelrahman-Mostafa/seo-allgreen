@@ -1,0 +1,27 @@
+<!-- Third-party analytics off the critical path (index.html <head>).
+     Loaded when the browser is idle; a blocked script (ad blocker → ERR_BLOCKED_BY_CLIENT)
+     fails silently instead of logging a console error Lighthouse penalises.
+     prerender.mjs strips any analytics <script src> that got injected during
+     rendering (idle callbacks fire in headless Chrome too), so this stays deferred.
+     NOTE: idle-loading still runs DURING a Lighthouse/PageSpeed test, so its JS
+     and third-party cookies still cost Performance and Best Practices. For 100,
+     gate on consent or first interaction — pattern in references/pagespeed-100.md. -->
+<script>
+  (function () {
+    var load = function () {
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.clarity.ms/tag/YOUR_ID"; // or GTM / Pixel loader
+      s.onerror = function () {};
+      document.head.appendChild(s);
+    };
+    if ("requestIdleCallback" in window) requestIdleCallback(load, { timeout: 6000 });
+    else window.addEventListener("load", function () { setTimeout(load, 2500); });
+  })();
+</script>
+
+<!-- Head budget that passed Lighthouse on the case-study site:
+     ≤ 4 preconnects (fonts.googleapis, fonts.gstatic crossorigin, GTM) — dns-prefetch the rest;
+     <link rel="preload" as="image" href="/hero.webp" fetchpriority="high"> for the LCP image;
+     one static <title>, one robots meta, one Organization JSON-LD at most (or none — SEOManager adds it);
+     <link rel="sitemap" type="application/xml" href="/sitemap.xml">. -->

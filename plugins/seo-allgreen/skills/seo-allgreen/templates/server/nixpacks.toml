@@ -1,0 +1,27 @@
+# Nixpacks (Coolify / Railway-style) deploy: build + pre-render + Caddy serving.
+# VITE_* vars must be set at BUILD time — Vite inlines them into the bundle.
+
+[variables]
+NODE_OPTIONS = "--max_old_space_size=4096"
+PUPPETEER_SKIP_DOWNLOAD = "1"
+
+[phases.setup]
+# Chromium from Nix (apt chromium on the Nixpacks base is a broken snap shim).
+# Do NOT add "caddy": Nixpacks injects its own for a detected SPA, and two copies
+# from different nixpkgs pins collide on a man page and abort the image build.
+nixPkgs = ["nodejs_22", "chromium"]
+
+[phases.install]
+cmds = ["npm install"]
+
+[phases.build]
+cmds = ["PUPPETEER_EXECUTABLE_PATH=$(command -v chromium) npm run build:static"]
+
+[start]
+# Write the Caddyfile HERE, not in a build phase: nothing can run after [start],
+# so no auto-injected phase can overwrite it. Paste server/Caddyfile as printf
+# lines (one quoted arg per line), then exec caddy.
+#
+# If a change doesn't seem to ship, look for "Build configuration changed.
+# Rebuilding image." in the deploy log — a CACHED image is the usual culprit.
+cmd = "printf '%s\\n' '{' 'admin off' 'auto_https off' '}' ':{$PORT:3000} {' 'root * /app/dist' 'encode gzip zstd' '@assets path /assets/*' 'header @assets Cache-Control \"public, max-age=31536000, immutable\"' 'header @assets X-Robots-Tag \"noindex\"' '@seo path /robots.txt /sitemap.xml /llms.txt' 'header @seo Cache-Control \"public, max-age=3600\"' '@dynamic {' 'not path /assets/*' 'not path /robots.txt /sitemap.xml /llms.txt' '}' 'header @dynamic Cache-Control \"no-cache\"' '@prerendered_noslash {' 'not path */' 'file {path}/index.html' '}' 'redir @prerendered_noslash https://example.com{path}/ permanent' 'try_files {path}/index.html {path} /app.html' 'file_server' '}' > /app/Caddyfile && exec caddy run --config /app/Caddyfile --adapter caddyfile"

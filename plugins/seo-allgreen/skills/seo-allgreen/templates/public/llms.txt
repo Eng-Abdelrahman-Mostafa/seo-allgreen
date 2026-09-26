@@ -1,0 +1,31 @@
+# Example — Brand name (native-language name)
+
+> One-paragraph summary: what the organisation is, who it serves, where.
+> Website: https://example.com/
+
+Example offers:
+
+- **Programme / product 1** — one line.
+- **Programme / product 2** — one line.
+
+Key facts (only what the site itself publishes): …
+
+## Main pages
+
+- [Home](https://example.com/): …
+- [Courses / Products](https://example.com/courses/): …
+- [About](https://example.com/about/): …
+- [Contact](https://example.com/contact/): …
+- [FAQ](https://example.com/faq/): …
+
+## Contact
+
+- Email / phone / WhatsApp / social links / app store links
+
+## Legal
+
+- [Privacy policy](https://example.com/legal/privacy-policy/)
+- [Terms](https://example.com/legal/terms/)
+
+<!-- llmstxt.org format. Serve as text/plain; charset=utf-8. Bilingual is fine.
+     Use the trailing-slash URLs. Update when public pages change. -->

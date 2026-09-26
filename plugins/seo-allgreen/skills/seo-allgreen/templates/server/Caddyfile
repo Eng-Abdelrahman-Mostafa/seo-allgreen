@@ -1,0 +1,49 @@
+# Static SPA + pre-rendered routes, behind a TLS-terminating proxy/CDN.
+# Replace example.com. Validate AND run it before shipping (tools/verify-serving.sh).
+{
+	admin off
+	auto_https off          # TLS is terminated in front (Traefik / Cloudflare / LB)
+}
+
+:{$PORT:3000} {           # non-privileged: container runtimes are often non-root
+	root * /app/dist
+
+	# www -> apex. Often answered by the CDN first — then fix it THERE (301, not 302).
+	@www host www.example.com
+	redir @www https://example.com{uri} permanent
+
+	encode gzip zstd        # runtime compression — build-time .gz/.br not needed
+
+	# Cache matrix: non-overlapping matchers => exactly one Cache-Control per response.
+	@assets path /assets/* /fonts/* /Fonts/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	# Crawlable (Google needs JS/CSS to render) but never indexed as pages.
+	header @assets X-Robots-Tag "noindex"
+	@media path /media/* /images/*
+	header @media Cache-Control "public, max-age=2592000"
+	@seo path /robots.txt /sitemap.xml /llms.txt
+	header @seo Cache-Control "public, max-age=3600"
+	@dynamic {
+		not path /assets/* /fonts/* /Fonts/* /media/* /images/*
+		not path /robots.txt /sitemap.xml /llms.txt
+	}
+	# HTML must revalidate: a cached index.html pointing at deleted hashed chunks
+	# = blank page after a deploy.
+	header @dynamic Cache-Control "no-cache"
+
+	# /blog -> https://example.com/blog/ as ONE absolute 301. Left to file_server,
+	# the redirect is RELATIVE and the proxy absolutises it to http:// — a
+	# protocol-downgrading 2-hop chain.
+	@prerendered_noslash {
+		not path */
+		file {path}/index.html
+	}
+	redir @prerendered_noslash https://example.com{path}/ permanent
+
+	# {path}/index.html FIRST: try_files treats a directory as "existing" and would
+	# hand file_server a bare dir (403 or implicit redirect).
+	# Fallback is the NOINDEX shell, never index.html (= the pre-rendered homepage,
+	# which would make every unknown/private URL a 200 duplicate of the homepage).
+	try_files {path}/index.html {path} /app.html
+	file_server
+}

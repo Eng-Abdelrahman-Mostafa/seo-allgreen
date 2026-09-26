@@ -1,0 +1,12 @@
+{
+  "name": "seo-allgreen",
+  "version": "1.0.0",
+  "description": "End-to-end technical SEO for any website, especially React/Vite SPAs: live audit, pre-rendering, canonicals, sitemap, robots.txt, llms.txt, hreflang, JSON-LD, Semrush Site Audit mapping and PageSpeed Insights 100.",
+  "author": {
+    "name": "Eng-Abdelrahman-Mostafa"
+  },
+  "homepage": "https://github.com/Eng-Abdelrahman-Mostafa/seo-allgreen",
+  "repository": "https://github.com/Eng-Abdelrahman-Mostafa/seo-allgreen",
+  "license": "MIT",
+  "keywords": ["seo", "pagespeed", "lighthouse", "core-web-vitals", "semrush", "prerender", "spa", "react", "vite", "sitemap", "structured-data", "hreflang"]
+}
