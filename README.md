@@ -1,5 +1,8 @@
 # SEO All-Green
 
+[![check](https://github.com/Eng-Abdelrahman-Mostafa/seo-allgreen/actions/workflows/check.yml/badge.svg)](https://github.com/Eng-Abdelrahman-Mostafa/seo-allgreen/actions/workflows/check.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 > All four PageSpeed scores green. Zero code-caused Semrush errors. Every SPA page crawlable.
 
 **A Claude Code skill for technical SEO: audit any site, make React/Vite SPAs
