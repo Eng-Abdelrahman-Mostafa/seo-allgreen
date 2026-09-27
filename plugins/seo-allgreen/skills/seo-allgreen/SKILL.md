@@ -1,6 +1,7 @@
 ---
 name: seo-allgreen
-description: End-to-end technical SEO for any website, especially client-rendered SPAs (React/Vite/CRA/Vue) that crawlers see as an empty shell. Use when asked to audit or fix SEO, triage a Semrush / Ahrefs / Search Console / Lighthouse report, pre-render an SPA, set up canonicals, trailing-slash URLs, sitemap, robots.txt, llms.txt, hreflang, Open Graph or JSON-LD structured data, fix soft 404s, duplicate titles/descriptions, broken or redirecting internal links, redirect chains, Cloudflare side effects, server/CDN config (Caddy, nginx, Nixpacks, Coolify), Core Web Vitals, or getting 100 in all four PageSpeed Insights / Lighthouse scores (Performance, Accessibility, Best Practices, SEO), or apply a client's meta/keyword sheet. Ships a live-site audit tool, a build verifier, a generic prerender + sitemap pipeline, SEOManager and schema templates, and server configs, derived from a production site.
+description: End-to-end technical SEO for any website, including Next.js (App/Pages Router) and client-rendered SPAs (React/Vite/CRA/Vue) that crawlers see as an empty shell. Use when asked to audit or fix SEO, triage a Semrush / Ahrefs / Search Console / Lighthouse report, pre-render an SPA, set up canonicals, trailing-slash URLs, sitemap, robots.txt, llms.txt, hreflang, Open Graph or JSON-LD structured data, fix soft 404s, duplicate titles/descriptions, broken or redirecting internal links, redirect chains, Cloudflare side effects, server/CDN config (Caddy, nginx, Nixpacks, Coolify), Core Web Vitals, or getting 100 in all four PageSpeed Insights / Lighthouse scores (Performance, Accessibility, Best Practices, SEO), or apply a client's meta/keyword sheet. Ships a live-site audit tool, a build verifier, a generic prerender + sitemap pipeline, SEOManager and schema templates, and server configs, derived from a production site.
+license: MIT
 ---
 
 # SEO All-Green
@@ -28,6 +29,8 @@ The case study with numbers is in [references/case-study.md](references/case-stu
 | `templates/server/` | `Caddyfile` and `nixpacks.toml` (validated and curl-tested); `nginx.conf` (same behaviour, **not run** — curl the four serving cases before shipping) |
 | `templates/snippets/` | `vite.config`, `main.jsx` and `index.html` fragments: CI build, SW denylist, chunking, safe mount, idle analytics |
 | `templates/public/` | `robots.txt` (search + AI-answer bots allowed, training bots blocked), `sitemap.xml`, `llms.txt` |
+| [references/nextjs.md](references/nextjs.md) | **Next.js** (tested on 16.3): metadata, canonical/trailingSlash, 404s vs streaming, JSON-LD, sitemap/robots/llms routes, `next/image` preload, scripts, static export, Pages Router |
+| `templates/nextjs/` | Next.js App Router files: `next.config.ts`, `lib/seo.ts`, layout, sitemap, robots, llms.txt route, JSON-LD, deferred analytics, detail-page pattern |
 | [references/playbook.md](references/playbook.md) | Deep detail per area + adapting to Next.js / Nuxt / Astro / Netlify / Vercel |
 | [references/pagespeed-100.md](references/pagespeed-100.md) | **100 in all four PageSpeed scores**: scoring maths and exact metric targets, every weighted Lighthouse 13 audit and how to pass it, third-party strategy, SPA recipe, checklist |
 | [references/semrush-checks.md](references/semrush-checks.md) | **Every Semrush Site Audit issue** (errors, warnings, notices) → fix, law, and which tool checks it; thresholds; what can't be guaranteed |
@@ -53,7 +56,9 @@ same goes for your own notes: don't write down crawler behaviour you haven't
 checked (a code comment claiming "Facebook ignores bare og:locale" had to be
 retracted).
 
-**2. Make content crawlable.** SPA → pre-render (setup below). SSR → skip.
+**2. Make content crawlable.** SPA → pre-render (setup below). **Next.js** →
+already server-rendered: follow [nextjs.md](references/nextjs.md) instead of
+the pre-render pipeline (the rest of this workflow is unchanged). Other SSR → skip.
 Links must be real `<a href>` in the HTML, not `<button onClick={navigate}>`.
 
 **3. Fix URL shape.** Pick the form that answers 200 (a directory → trailing

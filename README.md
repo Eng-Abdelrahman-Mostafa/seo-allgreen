@@ -5,8 +5,8 @@
 
 > All four PageSpeed scores green. Zero code-caused Semrush errors. Every SPA page crawlable.
 
-**A Claude Code skill for technical SEO: audit any site, make React/Vite SPAs
-crawlable, pass Semrush Site Audit, and reach 100 in PageSpeed Insights.**
+**An Agent Skill for technical SEO: audit any site, make Next.js and React/Vite
+apps crawlable, pass Semrush Site Audit, and reach 100 in PageSpeed Insights.**
 
 Built from a real production project, an Arabic-first React SPA where a
 Semrush crawl scored 67 % health with 221 errors. Over 45 commits it went to 62 pre-rendered
@@ -16,26 +16,26 @@ happened, with the fix and the check that proves it.
 
 ## Install
 
-**As a plugin (recommended, updates with `/plugin`):**
+Works in **Claude Code, OpenAI Codex, Cursor, GitHub Copilot, Gemini CLI,
+OpenCode, Amp, Goose, Windsurf, Cline, Kiro** and any other
+[Agent Skills](https://agentskills.io)-compatible agent.
+
+```bash
+# auto-detects your agents
+curl -fsSL https://raw.githubusercontent.com/Eng-Abdelrahman-Mostafa/seo-allgreen/main/install.sh | bash
+
+# or choose: claude, codex, cursor, copilot, gemini, opencode, amp, goose, windsurf, cline, kiro, all
+curl -fsSL https://raw.githubusercontent.com/Eng-Abdelrahman-Mostafa/seo-allgreen/main/install.sh | bash -s -- --agent codex,cursor
+```
+
+**Claude Code plugin** (auto-updates):
 
 ```
 /plugin marketplace add Eng-Abdelrahman-Mostafa/seo-allgreen
 /plugin install seo-allgreen@seo-allgreen
 ```
 
-**Or copy the skill** (no plugin system):
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Eng-Abdelrahman-Mostafa/seo-allgreen/main/install.sh | bash
-# just for one project:
-curl -fsSL https://raw.githubusercontent.com/Eng-Abdelrahman-Mostafa/seo-allgreen/main/install.sh | bash -s -- --project
-```
-
-**Or manually:** copy `plugins/seo-allgreen/skills/seo-allgreen/` to
-`~/.claude/skills/seo-allgreen/` (all projects) or `<project>/.claude/skills/seo-allgreen/`.
-
-Start a new Claude Code session. The skill loads automatically when you ask
-about SEO, or call it directly: `/seo-allgreen` (`/seo-allgreen:seo-allgreen` as a plugin).
+**Claude apps, Kiro import, Aider, manual install:** see [docs/INSTALL.md](docs/INSTALL.md).
 
 ## Use
 
@@ -43,6 +43,7 @@ Just ask:
 
 - "Audit the SEO of https://example.com"
 - "Pre-render this Vite app so Google sees the content"
+- "Set up metadata, sitemap and structured data in this Next.js app"
 - "Fix these Semrush errors" (paste or attach the export)
 - "Get this page to 100 on PageSpeed"
 - "Add canonicals, a sitemap and structured data"
@@ -63,12 +64,14 @@ node $T/verify-dist.mjs dist                         # gate a pre-rendered build
 plugins/seo-allgreen/skills/seo-allgreen/
 ├── SKILL.md                     workflow, 50 rules, triage map, setup
 ├── references/
-│   ├── playbook.md              deep detail per area + Next.js / Nuxt / Astro / hosts
+│   ├── nextjs.md                Next.js App/Pages Router (tested on 16.3)
+│   ├── playbook.md              deep detail per area + Nuxt / Astro / hosts
 │   ├── pagespeed-100.md         exact metric targets for 100, every Lighthouse 13 audit
 │   ├── semrush-checks.md        every Semrush Site Audit issue → fix → tool
 │   └── case-study.md            what broke, why, measured results (anonymised)
 └── templates/
-    ├── seo.config.mjs           one config file for the scripts
+    ├── nextjs/                  next.config, lib/seo.ts, sitemap/robots/llms routes, JSON-LD
+    ├── seo.config.mjs           one config file for the SPA scripts
     ├── scripts/                 prerender, route discovery + sitemap, language gate
     ├── src/                     SEOManager.jsx, canonicalUrl.js, structuredData.js
     ├── server/                  Caddyfile, nginx.conf, nixpacks.toml
@@ -106,7 +109,7 @@ precisely what's left. It can't guarantee a perfect score everywhere:
 
 ## Requirements
 
-- [Claude Code](https://claude.com/claude-code) for the skill.
+- Any Agent Skills-compatible coding agent (see Install).
 - Node 18+ for the tools.
 - For pre-rendering: `puppeteer-core` and Chrome or Chromium.
 - For `pagespeed.mjs --local`: Chrome (it runs `npx lighthouse`).

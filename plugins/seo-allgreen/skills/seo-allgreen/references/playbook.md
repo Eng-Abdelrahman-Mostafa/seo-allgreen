@@ -278,7 +278,7 @@ because pre-rendering bakes whatever the API returns at build time.
 | Stack | What changes |
 |---|---|
 | Vite / CRA / Vue CLI SPA | Everything here applies as-is |
-| Next.js (App Router) | No prerender — use `generateMetadata`, `alternates.canonical`, `app/sitemap.ts`, `app/robots.ts`, `generateStaticParams`; `trailingSlash` in next.config; JSON-LD via `<script type="application/ld+json">` in the page. Canonical/sitemap/URL laws unchanged |
+| Next.js | No pre-render needed — full guide and tested templates: [nextjs.md](nextjs.md). URL, canonical, schema, sitemap, robots, CDN and PageSpeed laws unchanged |
 | Nuxt | `useSeoMeta`, `@nuxtjs/sitemap`, `routeRules` prerender; same laws |
 | Astro / SSG | Pages are static already; set `trailingSlash`, `site`, `@astrojs/sitemap` |
 | SSR with API data | Readiness is server-side: return 404 status for missing items instead of a shell |
